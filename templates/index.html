@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Injection Prevention System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 600px;
+            width: 100%;
+        }
+        h2 { text-align: center; color: #818cf8; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #cbd5e1; }
+        input {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #475569;
+            background: #0f172a; color: white; box-sizing: border-box; font-size: 16px;
+        }
+        input:focus { border-color: #6366f1; outline: none; }
+        .btn-box { display: flex; gap: 15px; margin-top: 25px; }
+        button {
+            flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold;
+            cursor: pointer; font-size: 16px; transition: all 0.3s ease;
+        }
+        .btn-unsafe { background: #ef4444; color: white; }
+        .btn-unsafe:hover { background: #dc2626; box-shadow: 0 0 15px rgba(239,68,68,0.4); }
+        .btn-safe { background: #10b981; color: white; }
+        .btn-safe:hover { background: #059669; box-shadow: 0 0 15px rgba(16,185,129,0.4); }
+        .result-box {
+            margin-top: 30px; padding: 20px; border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6); border-left: 4px solid #6366f1;
+        }
+        .alert-danger { border-left-color: #ef4444; background: rgba(239,68,68,0.1); }
+        .alert-success { border-left-color: #10b981; background: rgba(16,185,129,0.1); }
+        .query-text { font-family: monospace; color: #f43f5e; background: #000; padding: 8px; border-radius: 4px; display: block; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🛡️ SQL Injection Prevention Shield</h2>
+        <p style="text-align: center; color: #94a3b8; margin-top: -20px; margin-bottom: 30px;">Test Vulnerable vs Parameterized Queries Live</p>
+        
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="username">Username / Payload:</label>
+                <input type="text" id="username" name="username" placeholder="e.g., admin' OR '1'='1" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="e.g., anypassword" required>
+            </div>
+            
+            <div class="btn-box">
+                <button type="submit" name="mode" value="unsafe" class="btn-unsafe">Run Vulnerable Query</button>
+                <button type="submit" name="mode" value="safe" class="btn-safe">Run Secure Query</button>
+            </div>
+        </form>
+
+        {% if result %}
+        <div class="result-box {% if 'Bypassed' in status or 'Malicious' in status %}alert-danger{% else %}alert-success{% endif %}">
+            <strong>Execution Mode:</strong> {{ mode | upper }}<br>
+            <strong>Status:</strong> {{ status }}<br>
+            <strong>Database Response:</strong> {{ result }}<br>
+            <strong>Executed SQL Statement:</strong>
+            <span class="query-text">{{ executed_query }}</span>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
