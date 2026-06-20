@@ -17,8 +17,8 @@ def init_db():
         )
     ''')
     # Dummy production credentials insert kar rahe hain
-    cursor.execute("INSERT INTO users (username, password) VALUES ('admin', 'supersecret123')")
-    cursor.execute("INSERT INTO users (username, password) VALUES ('basit_ali', 'riphah2026')")
+    cursor.execute("INSERT INTO users (username, password) VALUES ('Basit', '123')")
+    cursor.execute("INSERT INTO users (username, password) VALUES ('basitali', '2026')")
     conn.commit()
     conn.close()
 
@@ -26,7 +26,7 @@ def init_db():
 def index():
     return render_template('index.html')
 
-@app.route('/login', method=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
     username = request.form['username']
     password = request.form['password']
